@@ -10,6 +10,8 @@ import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.com.mkdelivery.client.api.dto.PhoneDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +24,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClientDTORequest {
 
+	@JsonProperty("id")
+	private String uuid;
+	
 	@NotEmpty
 	private String name;
 	
@@ -40,7 +45,6 @@ public class ClientDTORequest {
 	@NotEmpty
 	private String username;
 	
-	@NotEmpty
 	private String password;
 	
 }

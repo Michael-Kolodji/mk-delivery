@@ -17,9 +17,4 @@ public class MkdClientApplicationConfig extends WebMvcConfigurationSupport {
 		return objectMapper;
 	}
 
-//	@Bean
-//	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
-	
 }

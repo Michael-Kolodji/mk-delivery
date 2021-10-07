@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -39,19 +41,31 @@ public class Client {
 	@Getter
 	private String uuid;
 	
+	@NotBlank(message = "Name not be null")
 	private String name;
 	
+	@NotBlank(message = "CPF not be null")
 	private String cpf;
 	
+	@NotNull(message = "BirthDate not be null")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 	
+	@NotNull(message = "Phone not be null")
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private List<Phone> phones;
 	
+	@NotBlank(message = "Username not be null")
 	private String username;
 	
+	@NotBlank(message = "Password not be null")
 	private String password;
+	
+	public void setUuid(String uuid) {
+		if(uuid != null) {
+			this.uuid = uuid;
+		}
+	}
 	
 	public void generateUuid() {
 		this.uuid = UUID.randomUUID().toString();

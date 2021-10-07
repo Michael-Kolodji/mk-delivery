@@ -22,6 +22,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -41,12 +42,12 @@ class ClientServiceTest {
 	@MockBean
 	private ClientRepository repository;
 	
-//	@MockBean
-//	private BCryptPasswordEncoder passwordEncoder;
+	@MockBean
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@BeforeEach
 	void setUp() {
-		this.service = new ClientServiceImpl(repository/*, passwordEncoder*/);
+		this.service = new ClientServiceImpl(repository, passwordEncoder);
 	}
 	
 	@Test
@@ -65,7 +66,7 @@ class ClientServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Should throw exception when create a client wirth duplicated cpf")
+	@DisplayName("Should throw exception when create a client with duplicated cpf")
 	void createClientWithDuplicatedCPF() {
 		
 		when(repository.existsByCpf(anyString())).thenReturn(true);
@@ -75,6 +76,23 @@ class ClientServiceTest {
 		assertThat(throwable)
 			.isInstanceOf(BusinessException.class)
 			.hasMessage("CPF already registered!");
+	}
+	
+	@Test
+	@DisplayName("Should throw exception when create a client without password")
+	void createClientWithoutPassword() {
+		
+		Client client = Util.createClient();
+		client.setPassword(null);
+		
+		when(repository.existsByCpf(anyString())).thenReturn(false);
+		
+		Throwable throwable = Assertions.catchThrowable(() -> service.create(client));
+		
+		assertThat(throwable)
+			.isInstanceOf(BusinessException.class)
+			.hasMessage("Password not be null");
+		
 	}
 	
 	@Test
@@ -165,7 +183,7 @@ class ClientServiceTest {
 		
 		assertThat(throwable)
 			.isInstanceOf(BusinessException.class)
-			.hasMessage(String.format("Client with inconsistent: %s!", uuid));
+			.hasMessage(String.format("Client with inconsistent id: %s!", uuid));
 		
 	}
 	

@@ -95,7 +95,7 @@ class ClientResourceTest {
 		
 		mvc.perform(request)
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("errors", hasSize(6)))
+		.andExpect(jsonPath("errors", hasSize(5)))
 		.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
 		.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 	}
@@ -235,7 +235,7 @@ class ClientResourceTest {
 		
 		mvc.perform(request)
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("errors", hasSize(6)))
+		.andExpect(jsonPath("errors", hasSize(5)))
 		.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
 		.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 		
