@@ -12,9 +12,10 @@
 	<artifactId>mkd-payment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mkd-payment</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Payment microservice</description>
 	<properties>
 		<java.version>11</java.version>
+		<model-mapper.version>2.4.4</model-mapper.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -51,6 +52,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${model-mapper.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
