@@ -1,31 +1,31 @@
 package br.com.mkdelivery.payment.api.dto;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import br.com.mkdelivery.payment.api.domain.enums.PaymentType;
 import br.com.mkdelivery.payment.api.domain.enums.StatusPagamento;
+import br.com.mkdelivery.payment.api.domain.models.Payment;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDTO {
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
+public abstract class PaymentDTO {
 
 	@JsonProperty("id")
-	private String uuid;
-	private StatusPagamento statusPagamento; 
-	private LocalDate dueDate;
-	private String barCode;
-	private String cardHolder;
-	private String cardNumber;
-	private String cvv;
-	private LocalDate expirationDate;
-	private PaymentType paymentType;
+	protected String uuid;
 	
+	protected StatusPagamento statusPagamento;
+
+	protected PaymentDTO nextProcessor;
+
+	public abstract Payment convertToPayment(PaymentDTO dto);
+	
+	public abstract PaymentDTO convertToDTO(Payment payment);
+
 }
