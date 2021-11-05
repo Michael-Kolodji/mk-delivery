@@ -2,6 +2,8 @@ package br.com.mkdelivery.payment.api.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 import org.modelmapper.ModelMapper;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
@@ -19,7 +21,9 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class PaymentSlipDTO extends PaymentDTO {
 	
+	@NotNull
 	private LocalDate dueDate;
+	@NotNull
 	private String barCode;
 	
 	@Override

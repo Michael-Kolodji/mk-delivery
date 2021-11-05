@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import br.com.mkdelivery.payment.api.domain.enums.StatusPagamento;
 import lombok.AllArgsConstructor;
@@ -37,7 +36,6 @@ public abstract class Payment {
 	@Getter
 	protected String uuid;
 	
-	@NotNull
 	protected StatusPagamento statusPagamento; 
 	
 	public void setUuid(String uuid) {

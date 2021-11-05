@@ -2,6 +2,9 @@ package br.com.mkdelivery.payment.api.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.modelmapper.ModelMapper;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
@@ -19,9 +22,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class PaymentCardDTO extends PaymentDTO {
 
+	@NotEmpty
 	private String cardHolder;
+	@NotEmpty
 	private String cardNumber;
+	@NotEmpty
 	private String cvv;
+	@NotNull
 	private LocalDate expirationDate;
 	
 	@Override

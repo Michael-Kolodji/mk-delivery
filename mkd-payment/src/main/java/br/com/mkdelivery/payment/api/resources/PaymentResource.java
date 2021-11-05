@@ -1,5 +1,7 @@
 package br.com.mkdelivery.payment.api.resources;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ public class PaymentResource {
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public PaymentDTO save(@RequestBody PaymentDTO dto) {
+	public PaymentDTO save(@RequestBody @Valid PaymentDTO dto) {
 		Payment payment = dto.convertToPayment(dto);
 		return dto.convertToDTO(service.save(payment));
 	}

@@ -1,5 +1,6 @@
-package br.com.mkdelivery.payment.service;
+package br.com.mkdelivery.payment.api.resources;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,8 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
+import br.com.mkdelivery.payment.api.dto.PaymentCardDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentDTO;
-import br.com.mkdelivery.payment.api.resources.PaymentResource;
+import br.com.mkdelivery.payment.api.dto.PaymentSlipDTO;
+import br.com.mkdelivery.payment.service.PaymentService;
 import br.com.mkdelivery.payment.util.UtilPayment;
 
 @ExtendWith(SpringExtension.class)
@@ -45,7 +49,7 @@ class PaymentResourceTest {
 	
 	@Test
 	@DisplayName("Should create a payment slip")
-	void savePaymentSlipDTO() throws Exception {
+	void savePaymentSlip() throws Exception {
 
 		PaymentDTO paymentDTO = UtilPayment.paymentSlipDTO();
 		
@@ -69,7 +73,7 @@ class PaymentResourceTest {
 	
 	@Test
 	@DisplayName("Should create a payment card")
-	void savePaymentCardDTO() throws Exception {
+	void savePaymentCard() throws Exception {
 
 		PaymentDTO paymentDTO = UtilPayment.paymentCardDTO();
 		
@@ -91,4 +95,44 @@ class PaymentResourceTest {
 		
 	}
 	
+
+	@Test
+	@DisplayName("Should throw exception create a payment slip")
+	void saveInvalidPaymentSlip() throws Exception {
+		
+		String json = objectMapper.writeValueAsString(new PaymentSlipDTO());
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.post(API_PAYMENT)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json);
+		
+		mvc.perform(request)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("errors", hasSize(2)))
+			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
+			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
+	}
+	
+
+	@Test
+	@DisplayName("Should throw exception create a payment card")
+	void saveInvalidPaymentCard() throws Exception {
+		
+		String json = objectMapper.writeValueAsString(new PaymentCardDTO());
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.post(API_PAYMENT)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json);
+		
+		mvc.perform(request)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("errors", hasSize(2)))
+			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
+			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
+		
+	}
 }
