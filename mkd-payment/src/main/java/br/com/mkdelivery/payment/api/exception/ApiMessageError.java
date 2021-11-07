@@ -1,6 +1,7 @@
 package br.com.mkdelivery.payment.api.exception;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.validation.BindingResult;
@@ -12,9 +13,10 @@ public class ApiMessageError {
 	private Integer code;
 	private List<String> errors;
 	
-	public ApiMessageError(String name, int value, BindingResult result) {
-		this.message = name;
-		this.code = value;
+	public ApiMessageError(String message, int code, BindingResult result) {
+		
+		this.message = message;
+		this.code = code;
 		this.errors = new ArrayList<>();
 	    
 		result.getAllErrors()
@@ -25,6 +27,12 @@ public class ApiMessageError {
 			});
 	}
 	
+	public ApiMessageError(String message, int code, String error) {
+		this.message = message;
+		this.code = code;
+		this.errors = Arrays.asList(error);
+	}
+
 	public String getMessage() {
 		return message;
 	}

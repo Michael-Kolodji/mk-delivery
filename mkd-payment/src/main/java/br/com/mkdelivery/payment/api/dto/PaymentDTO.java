@@ -1,5 +1,6 @@
 package br.com.mkdelivery.payment.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -22,6 +23,7 @@ public abstract class PaymentDTO {
 	
 	protected StatusPagamento statusPagamento;
 
+	@JsonIgnore
 	protected PaymentDTO nextProcessor;
 
 	public abstract Payment convertToPayment(PaymentDTO dto);
