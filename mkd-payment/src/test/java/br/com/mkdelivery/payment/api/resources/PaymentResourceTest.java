@@ -2,6 +2,7 @@ package br.com.mkdelivery.payment.api.resources;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,7 +66,8 @@ class PaymentResourceTest {
 		
 		mvc.perform(request)
 			.andExpect(status().isCreated())
-			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("PaymentSlipDTO")))
+			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("SLIP")))
+			.andExpect(jsonPath("type").value("SLIP"))
 			.andExpect(jsonPath("id").value(paymentDTO.getUuid()));
 		
 		
@@ -89,7 +91,8 @@ class PaymentResourceTest {
 		
 		mvc.perform(request)
 			.andExpect(status().isCreated())
-			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("PaymentCardDTO")))
+			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("CARD")))
+			.andExpect(jsonPath("type").value("CARD"))
 			.andExpect(jsonPath("id").value(paymentDTO.getUuid()));
 		
 		
@@ -130,7 +133,7 @@ class PaymentResourceTest {
 		
 		mvc.perform(request)
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("errors", hasSize(2)))
+			.andExpect(jsonPath("errors", hasSize(4)))
 			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
 			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 		

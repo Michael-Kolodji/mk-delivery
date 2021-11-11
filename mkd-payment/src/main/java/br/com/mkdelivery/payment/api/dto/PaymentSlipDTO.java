@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.domain.models.PaymentSlip;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@JsonTypeName("SLIP")
 public class PaymentSlipDTO extends PaymentDTO {
 	
 	@NotNull

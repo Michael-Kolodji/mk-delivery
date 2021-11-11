@@ -24,4 +24,5 @@ public class ApiExceptionHandler {
 	public ApiMessageError httpMessageNotReadableException(HttpMessageNotReadableException e) {
 		return new ApiMessageError(BAD_REQUEST.name(), BAD_REQUEST.value(), e.getMessage());
 	}
+	
 }

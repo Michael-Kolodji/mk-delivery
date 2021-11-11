@@ -2,7 +2,9 @@ package br.com.mkdelivery.payment.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 import br.com.mkdelivery.payment.api.domain.enums.StatusPagamento;
 import br.com.mkdelivery.payment.api.domain.models.Payment;
@@ -15,7 +17,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PaymentSlipDTO.class, name = "SLIP"),
+    @JsonSubTypes.Type(value = PaymentCardDTO.class, name = "CARD")
+})
 public abstract class PaymentDTO {
 
 	@JsonProperty("id")

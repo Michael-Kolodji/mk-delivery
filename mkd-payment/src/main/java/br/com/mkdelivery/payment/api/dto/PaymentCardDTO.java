@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.domain.models.PaymentCard;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@JsonTypeName("CARD")
 public class PaymentCardDTO extends PaymentDTO {
 
 	@NotEmpty
