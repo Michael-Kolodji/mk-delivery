@@ -2,7 +2,6 @@ package br.com.mkdelivery.payment.api.resources;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
-import br.com.mkdelivery.payment.api.dto.PaymentCardDTO;
+import br.com.mkdelivery.payment.api.dto.PaymentCreditCardDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentSlipDTO;
 import br.com.mkdelivery.payment.service.PaymentService;
@@ -81,7 +80,7 @@ class PaymentResourceTest {
 		
 		String json = objectMapper.writeValueAsString(paymentDTO);
 		
-		Mockito.when(service.save(Mockito.any(Payment.class))).thenReturn(UtilPayment.paymentCard());
+		Mockito.when(service.save(Mockito.any(Payment.class))).thenReturn(UtilPayment.paymentCreditCard());
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)
@@ -123,7 +122,7 @@ class PaymentResourceTest {
 	@DisplayName("Should throw exception create a payment card")
 	void saveInvalidPaymentCard() throws Exception {
 		
-		String json = objectMapper.writeValueAsString(new PaymentCardDTO());
+		String json = objectMapper.writeValueAsString(new PaymentCreditCardDTO());
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)

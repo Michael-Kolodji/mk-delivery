@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentCard extends Payment {
+public class PaymentCreditCard extends Payment {
 
 	@NotBlank
 	private String cardHolder;

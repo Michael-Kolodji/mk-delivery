@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PaymentSlipDTO.class, name = "SLIP"),
-    @JsonSubTypes.Type(value = PaymentCardDTO.class, name = "CARD")
+    @JsonSubTypes.Type(value = PaymentCreditCardDTO.class, name = "CARD")
 })
 public abstract class PaymentDTO {
 

@@ -10,7 +10,7 @@ import org.modelmapper.ModelMapper;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
-import br.com.mkdelivery.payment.api.domain.models.PaymentCard;
+import br.com.mkdelivery.payment.api.domain.models.PaymentCreditCard;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonTypeName("CARD")
-public class PaymentCardDTO extends PaymentDTO {
+public class PaymentCreditCardDTO extends PaymentDTO {
 
 	@NotEmpty
 	private String cardHolder;
@@ -36,9 +36,9 @@ public class PaymentCardDTO extends PaymentDTO {
 	
 	@Override
 	public Payment convertToPayment(PaymentDTO dto) {
-		PaymentCard payment = null;
-		if(dto instanceof PaymentCardDTO) {
-			payment = new ModelMapper().map(dto, PaymentCard.class);
+		PaymentCreditCard payment = null;
+		if(dto instanceof PaymentCreditCardDTO) {
+			payment = new ModelMapper().map(dto, PaymentCreditCard.class);
 		} else if (nextProcessor != null) {
             return nextProcessor.convertToPayment(dto);
         }
@@ -47,9 +47,9 @@ public class PaymentCardDTO extends PaymentDTO {
 	
 	@Override
 	public PaymentDTO convertToDTO(Payment payment) {
-		PaymentCardDTO dto = null;
-		if(payment instanceof PaymentCard) {
-			dto = new ModelMapper().map(payment, PaymentCardDTO.class);
+		PaymentCreditCardDTO dto = null;
+		if(payment instanceof PaymentCreditCard) {
+			dto = new ModelMapper().map(payment, PaymentCreditCardDTO.class);
 		} else if (nextProcessor != null) {
             return nextProcessor.convertToDTO(payment);
         }

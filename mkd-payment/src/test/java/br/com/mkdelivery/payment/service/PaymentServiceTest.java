@@ -1,6 +1,7 @@
 package br.com.mkdelivery.payment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.models.repositories.PaymentRepository;
+import br.com.mkdelivery.payment.exception.BusinessException;
 import br.com.mkdelivery.payment.service.impl.PaymentServiceImpl;
 import br.com.mkdelivery.payment.util.UtilPayment;
 
@@ -45,5 +47,17 @@ class PaymentServiceTest {
 		assertThat(paymentSaved.getId()).isNotNull();
 	}
 	
-	
+	@Test
+	@DisplayName("Should throw exception when create a payment with invalid credit card")
+	void validCreditCard() {
+		var paymentCard = UtilPayment.paymentCreditCard();
+		paymentCard.setCardNumber("45566546464665645");
+		
+		Throwable throwable = catchThrowable(() -> service.save(UtilPayment.paymentCreditCard()));
+		
+		assertThat(throwable)
+			.isInstanceOf(BusinessException.class)
+			.hasMessage("Invalid credit card number.");
+	}
+
 }

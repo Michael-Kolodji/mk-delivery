@@ -4,11 +4,9 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import br.com.mkdelivery.payment.api.domain.enums.StatusPagamento;
-import br.com.mkdelivery.payment.api.domain.models.Payment;
-import br.com.mkdelivery.payment.api.domain.models.PaymentCard;
+import br.com.mkdelivery.payment.api.domain.models.PaymentCreditCard;
 import br.com.mkdelivery.payment.api.domain.models.PaymentSlip;
-import br.com.mkdelivery.payment.api.dto.PaymentCardDTO;
-import br.com.mkdelivery.payment.api.dto.PaymentDTO;
+import br.com.mkdelivery.payment.api.dto.PaymentCreditCardDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentSlipDTO;
 
 public final class UtilPayment {
@@ -23,19 +21,20 @@ public final class UtilPayment {
 				.build();
 	}
 
-	public static Payment paymentCard() {
-		return PaymentCard
+	public static PaymentCreditCard paymentCreditCard() {
+		return PaymentCreditCard
 				.builder()
 				.uuid("a0d7a0bf-ac09-4af6-b56f-13c1277a6b53")
 				.statusPagamento(StatusPagamento.RECEBIDO)
 				.cardNumber("1111 2222 3333 4444")
+//				.cardNumber("5106 4586 6759 4743")
 				.cvv("111")
 				.cardHolder("Jaspion")
 				.expirationDate(LocalDate.of(2023, Month.SEPTEMBER, 10))
 				.build();
 	}
 	
-	public static PaymentDTO paymentSlipDTO() {
+	public static PaymentSlipDTO paymentSlipDTO() {
 		return PaymentSlipDTO
 				.builder()
 				.uuid("a0d7a0bf-ac09-4af6-b56f-13c1277a6b52")
@@ -45,8 +44,8 @@ public final class UtilPayment {
 				.build();
 	}
 
-	public static PaymentDTO paymentCardDTO() {
-		return PaymentCardDTO
+	public static PaymentCreditCardDTO paymentCardDTO() {
+		return PaymentCreditCardDTO
 				.builder()
 				.uuid("a0d7a0bf-ac09-4af6-b56f-13c1277a6b53")
 				.statusPagamento(StatusPagamento.RECEBIDO)
