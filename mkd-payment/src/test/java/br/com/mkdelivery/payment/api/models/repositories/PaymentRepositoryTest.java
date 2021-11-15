@@ -23,7 +23,7 @@ import br.com.mkdelivery.payment.util.UtilPayment;
 class PaymentRepositoryTest {
 
 	@Autowired
-	private PaymentRepository repository;
+	PaymentRepository repository;
 	
 	@Test
 	@DisplayName("Should create a payment")
@@ -35,7 +35,7 @@ class PaymentRepositoryTest {
 	}
 	
 	@Test
-	@DisplayName("Should create a payment")
+	@DisplayName("Should throw exception when create a invalid payment")
 	void saveInvalidPayment() {
 		Throwable throwable = catchThrowable(() -> repository.save(new PaymentSlip()));
 		

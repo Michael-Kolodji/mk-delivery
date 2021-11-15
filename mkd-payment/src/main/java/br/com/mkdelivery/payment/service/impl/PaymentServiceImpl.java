@@ -19,9 +19,10 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public Payment save(Payment payment) {
 		
+		CreditCardValidator cardValidator = new CreditCardValidator();
 		if(payment instanceof PaymentCreditCard 
-				&& !CreditCardValidator.isValidCreditCard(payment)) {
-			throw new BusinessException("Invalid credit card number.");
+				&& !cardValidator.isValidCreditCard(payment)) {
+			throw new BusinessException("Invalid credit card.");
 		}
 		
 		payment.generateUuid();

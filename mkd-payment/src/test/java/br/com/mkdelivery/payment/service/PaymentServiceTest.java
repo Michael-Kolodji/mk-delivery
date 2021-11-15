@@ -22,10 +22,10 @@ import br.com.mkdelivery.payment.util.UtilPayment;
 @ActiveProfiles("test")
 class PaymentServiceTest {
 
-	private PaymentService service;
+	PaymentService service;
 	
 	@MockBean
-	private PaymentRepository repository;
+	PaymentRepository repository;
 	
 	@BeforeEach
 	void setup() {
@@ -53,11 +53,11 @@ class PaymentServiceTest {
 		var paymentCard = UtilPayment.paymentCreditCard();
 		paymentCard.setCardNumber("45566546464665645");
 		
-		Throwable throwable = catchThrowable(() -> service.save(UtilPayment.paymentCreditCard()));
+		Throwable throwable = catchThrowable(() -> service.save(paymentCard));
 		
 		assertThat(throwable)
 			.isInstanceOf(BusinessException.class)
-			.hasMessage("Invalid credit card number.");
+			.hasMessage("Invalid credit card.");
 	}
 
 }

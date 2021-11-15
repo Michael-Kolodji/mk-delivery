@@ -36,16 +36,16 @@ import br.com.mkdelivery.payment.util.UtilPayment;
 @WebMvcTest(controllers = PaymentResource.class)
 class PaymentResourceTest {
 
-	private static final String API_PAYMENT = "/api/payments";
+	static final String API_PAYMENT = "/api/payments";
 	
 	@Autowired
-	private MockMvc mvc;
+	MockMvc mvc;
 	
 	@Autowired
-	private ObjectMapper objectMapper;
+	ObjectMapper objectMapper;
 	
 	@MockBean
-	private PaymentService service;
+	PaymentService service;
 	
 	@Test
 	@DisplayName("Should create a payment slip")
@@ -99,7 +99,7 @@ class PaymentResourceTest {
 	
 
 	@Test
-	@DisplayName("Should throw exception create a payment slip")
+	@DisplayName("Should throw exception create a invalid payment slip")
 	void saveInvalidPaymentSlip() throws Exception {
 		
 		String json = objectMapper.writeValueAsString(new PaymentSlipDTO());
@@ -119,7 +119,7 @@ class PaymentResourceTest {
 	
 
 	@Test
-	@DisplayName("Should throw exception create a payment card")
+	@DisplayName("Should throw exception create a invalid payment card")
 	void saveInvalidPaymentCard() throws Exception {
 		
 		String json = objectMapper.writeValueAsString(new PaymentCreditCardDTO());
