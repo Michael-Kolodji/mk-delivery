@@ -2,9 +2,18 @@ package br.com.mkdelivery.payment.api.resources;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,10 +34,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.mkdelivery.payment.api.domain.enums.PaymentStatus;
+import br.com.mkdelivery.payment.api.domain.enums.PaymentType;
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.dto.PaymentCreditCardDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentSlipDTO;
+import br.com.mkdelivery.payment.api.filter.PaymentFilter;
 import br.com.mkdelivery.payment.service.PaymentService;
 import br.com.mkdelivery.payment.util.UtilPayment;
 
@@ -59,14 +73,14 @@ class PaymentResourceTest {
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.contentType(APPLICATION_JSON)
 				.content(json);
 		
 		mvc.perform(request)
 			.andExpect(status().isCreated())
 			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("SLIP")))
-			.andExpect(jsonPath("type").value("SLIP"))
+			.andExpect(jsonPath("type").value(PaymentType.PAYMENT_SLIP.name()))
 			.andExpect(jsonPath("id").value(paymentDTO.getUuid()));
 		
 		
@@ -84,19 +98,18 @@ class PaymentResourceTest {
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.contentType(APPLICATION_JSON)
 				.content(json);
 		
 		mvc.perform(request)
 			.andExpect(status().isCreated())
 			.andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("CARD")))
-			.andExpect(jsonPath("type").value("CARD"))
+			.andExpect(jsonPath("type").value(PaymentType.PAYMENT_CREDIT_CARD.name()))
 			.andExpect(jsonPath("id").value(paymentDTO.getUuid()));
 		
 		
 	}
-	
 
 	@Test
 	@DisplayName("Should throw exception create a invalid payment slip")
@@ -106,8 +119,8 @@ class PaymentResourceTest {
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.contentType(APPLICATION_JSON)
 				.content(json);
 		
 		mvc.perform(request)
@@ -116,7 +129,6 @@ class PaymentResourceTest {
 			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
 			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 	}
-	
 
 	@Test
 	@DisplayName("Should throw exception create a invalid payment card")
@@ -126,8 +138,8 @@ class PaymentResourceTest {
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.post(API_PAYMENT)
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.contentType(APPLICATION_JSON)
 				.content(json);
 		
 		mvc.perform(request)
@@ -137,4 +149,72 @@ class PaymentResourceTest {
 			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 		
 	}
+
+	@Test
+	@DisplayName("Should found a payment by uuid")
+	void findPaymentById() throws Exception {
+		
+		String id = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		
+		when(service.findById(anyString())).thenReturn(UtilPayment.paymentSlip());
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.get(API_PAYMENT.concat("/"+id))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(id));
+	}
+	
+	@Test
+	@DisplayName("Should throw exception found a payment by uuid")
+	void findPaymentByInexistentId() throws Exception {
+		
+		String id = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		String message = "Payment not found. id: " + id;
+		
+		when(service.findById(anyString())).thenThrow(new EntityNotFoundException(message));
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.get(API_PAYMENT.concat("/"+id))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("errors", hasSize(1)))
+			.andExpect(jsonPath("errors[0]").value(message));
+		
+	}
+	
+	@Test
+	@DisplayName("Should found payments by Filter")
+	void findByPaymentFilter() throws Exception {
+		
+		var payment = UtilPayment.paymentSlip();
+		var filter = PaymentFilter
+				.builder()
+				.type(PaymentType.PAYMENT_SLIP.toString())
+				.status(PaymentStatus.RECEBIDO.toString())
+				.build();
+		
+		when(service.findByFilter(any(Payment.class), any(Pageable.class)))
+			.thenReturn(new PageImpl<>(Arrays.asList(payment), PageRequest.of(0, 100), 1));
+	
+		String queryString = String.format("?type=%s&status=%s&page=0&size=100", "payment_slip", 
+				filter.getType(), filter.getStatus());
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.get(API_PAYMENT.concat(queryString))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("content", Matchers.hasSize(1)))
+			.andExpect(jsonPath("totalElements").value(1))
+			.andExpect(jsonPath("pageable.pageSize").value(100))
+			.andExpect(jsonPath("pageable.pageNumber").value(0));
+		
+	}
+	
 }

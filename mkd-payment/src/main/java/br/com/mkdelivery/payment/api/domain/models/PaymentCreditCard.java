@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "PAYMENT_CARD")
-@DiscriminatorValue("PAYMENT_CARD")
+@Table(name = "PAYMENT_CREDIT_CARD")
+@DiscriminatorValue("PAYMENT_CREDIT_CARD")
 @Data
 @SuperBuilder
 @NoArgsConstructor

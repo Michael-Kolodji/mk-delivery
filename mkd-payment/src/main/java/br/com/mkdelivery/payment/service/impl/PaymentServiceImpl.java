@@ -1,7 +1,15 @@
 package br.com.mkdelivery.payment.service.impl;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.mkdelivery.payment.api.domain.enums.PaymentStatus;
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.domain.models.PaymentCreditCard;
 import br.com.mkdelivery.payment.api.models.repositories.PaymentRepository;
@@ -19,14 +27,32 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public Payment save(Payment payment) {
 		
-		CreditCardValidator cardValidator = new CreditCardValidator();
 		if(payment instanceof PaymentCreditCard 
-				&& !cardValidator.isValidCreditCard(payment)) {
+				&& !new CreditCardValidator().isValidCreditCard(payment)) {
 			throw new BusinessException("Invalid credit card.");
 		}
 		
 		payment.generateUuid();
+		payment.setStatus(PaymentStatus.RECEBIDO);
 		return repository.save(payment);
+	}
+
+	@Override
+	public Payment findById(String uuid) {
+		return repository.findByUuid(uuid)
+				.orElseThrow(() -> 
+					new EntityNotFoundException("Payment not found. id: " + uuid));
+	}
+
+	@Override
+	public Page<Payment> findByFilter(Payment filter, Pageable pageable) {
+		var example = Example.of(filter, 
+							ExampleMatcher
+								.matching()
+								.withIgnoreCase()
+								.withIgnoreNullValues()
+								.withStringMatcher(StringMatcher.CONTAINING));
+		return repository.findAll(example, pageable);
 	}
 
 }

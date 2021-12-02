@@ -2,6 +2,7 @@ package br.com.mkdelivery.payment.api.domain.models;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -9,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import br.com.mkdelivery.payment.api.domain.enums.StatusPagamento;
+import br.com.mkdelivery.payment.api.domain.enums.PaymentStatus;
+import br.com.mkdelivery.payment.api.domain.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class Payment {
+public class Payment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +39,11 @@ public abstract class Payment {
 	@Getter
 	protected String uuid;
 	
-	protected StatusPagamento statusPagamento; 
+	@Transient
+	@Column(name = "payment_type")
+	protected PaymentType type;
+	
+	protected PaymentStatus status; 
 	
 	public void setUuid(String uuid) {
 		if(uuid != null) {
@@ -47,4 +54,5 @@ public abstract class Payment {
 	public void generateUuid() {
 		this.uuid = UUID.randomUUID().toString();
 	}
+	
 }

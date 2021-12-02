@@ -1,5 +1,5 @@
 package br.com.mkdelivery.payment.api.domain.enums;
 
-public enum StatusPagamento {
+public enum PaymentStatus {
 	PROCESSANDO, CANCELADO, RECEBIDO;
 }
