@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,11 +40,13 @@ public class PaymentResource {
 	}
 	
 	@GetMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
 	public PaymentDTO findById(@PathVariable String id) {
-		return PaymentDTO.getPaymentDto(service.findById(id));
+		return PaymentDTO.getPaymentDto(service.findByUuid(id));
 	}
 	
 	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
 	public Page<PaymentDTO> findByType(PaymentFilter filter, Pageable pageable) {
 		Payment payment = new ModelMapper().map(filter, Payment.class);
 		Page<Payment> result = service.findByFilter(payment, pageable);
@@ -54,6 +57,12 @@ public class PaymentResource {
 				.collect(Collectors.toList());
 		
 		return new PageImpl<>(payments, pageable, result.getTotalElements());
+	}
+	
+	@PutMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public PaymentDTO chargebackPayment(@PathVariable String id) {
+		return PaymentDTO.getPaymentDto(service.chargeback(id));
 	}
 
 }

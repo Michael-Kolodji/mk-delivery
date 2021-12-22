@@ -9,8 +9,10 @@ public interface PaymentService {
 
 	Payment save(Payment payment);
 
-	Payment findById(String uuid);
+	Payment findByUuid(String uuid);
 
 	Page<Payment> findByFilter(Payment filter, Pageable pageable);
+
+	Payment chargeback(String uuid);
 
 }

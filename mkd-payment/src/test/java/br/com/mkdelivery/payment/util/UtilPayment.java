@@ -18,7 +18,7 @@ public final class UtilPayment {
 				.builder()
 				.uuid("a0d7a0bf-ac09-4af6-b56f-13c1277a6b52")
 				.type(PaymentType.PAYMENT_SLIP)
-				.status(PaymentStatus.RECEBIDO)
+				.status(PaymentStatus.RECEIVED)
 				.barCode("456456465489654654564654")
 				.dueDate(LocalDate.now())
 				.build();
@@ -29,7 +29,7 @@ public final class UtilPayment {
 				.builder()
 				.uuid("a0d7a0bf-ac09-4af6-b56f-13c1277a6b53")
 				.type(PaymentType.PAYMENT_CREDIT_CARD)
-				.status(PaymentStatus.RECEBIDO)
+				.status(PaymentStatus.RECEIVED)
 //				.cardNumber("1111 2222 3333 4444")
 				.cardNumber("5106 4586 6759 4743")
 				.cvv("111")

@@ -33,7 +33,7 @@ public abstract class PaymentDTO {
 	
 	protected PaymentType type;
 	
-	protected PaymentStatus statusPagamento;
+	protected PaymentStatus status;
 
 	@JsonIgnore
 	protected PaymentDTO nextProcessor;

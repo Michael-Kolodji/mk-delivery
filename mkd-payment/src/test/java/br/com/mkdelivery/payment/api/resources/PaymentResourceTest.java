@@ -37,10 +37,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.mkdelivery.payment.api.domain.enums.PaymentStatus;
 import br.com.mkdelivery.payment.api.domain.enums.PaymentType;
 import br.com.mkdelivery.payment.api.domain.models.Payment;
+import br.com.mkdelivery.payment.api.domain.models.PaymentSlip;
 import br.com.mkdelivery.payment.api.dto.PaymentCreditCardDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentDTO;
 import br.com.mkdelivery.payment.api.dto.PaymentSlipDTO;
 import br.com.mkdelivery.payment.api.filter.PaymentFilter;
+import br.com.mkdelivery.payment.exception.BusinessException;
 import br.com.mkdelivery.payment.service.PaymentService;
 import br.com.mkdelivery.payment.util.UtilPayment;
 
@@ -156,7 +158,7 @@ class PaymentResourceTest {
 		
 		String id = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
 		
-		when(service.findById(anyString())).thenReturn(UtilPayment.paymentSlip());
+		when(service.findByUuid(anyString())).thenReturn(UtilPayment.paymentSlip());
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.get(API_PAYMENT.concat("/"+id))
@@ -174,7 +176,7 @@ class PaymentResourceTest {
 		String id = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
 		String message = "Payment not found. id: " + id;
 		
-		when(service.findById(anyString())).thenThrow(new EntityNotFoundException(message));
+		when(service.findByUuid(anyString())).thenThrow(new EntityNotFoundException(message));
 		
 		RequestBuilder request = MockMvcRequestBuilders
 				.get(API_PAYMENT.concat("/"+id))
@@ -195,7 +197,7 @@ class PaymentResourceTest {
 		var filter = PaymentFilter
 				.builder()
 				.type(PaymentType.PAYMENT_SLIP.toString())
-				.status(PaymentStatus.RECEBIDO.toString())
+				.status(PaymentStatus.RECEIVED.toString())
 				.build();
 		
 		when(service.findByFilter(any(Payment.class), any(Pageable.class)))
@@ -215,6 +217,48 @@ class PaymentResourceTest {
 			.andExpect(jsonPath("pageable.pageSize").value(100))
 			.andExpect(jsonPath("pageable.pageNumber").value(0));
 		
+	}
+	
+	@Test
+	@DisplayName("Should reverse a payment")
+	void chargebackPayment() throws Exception {
+		
+		PaymentSlip paymentSlip = UtilPayment.paymentSlip();
+		paymentSlip.setId(1l);
+		paymentSlip.setStatus(PaymentStatus.REVERSED);
+		
+		String uuid = paymentSlip.getUuid();
+		
+		when(service.chargeback(Mockito.anyString())).thenReturn(paymentSlip);
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.put(API_PAYMENT.concat("/" + uuid))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(paymentSlip.getUuid()))
+			.andExpect(jsonPath("status").value(PaymentStatus.REVERSED.toString()));
+	}
+	
+	@Test
+	@DisplayName("Should throw a invalid reverse a payment")
+	void invalidChargebackPayment() throws Exception {
+		
+		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		
+		String message = "The payment can't be reversed";
+		when(service.chargeback(Mockito.anyString())).thenThrow(new BusinessException(message));
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.put(API_PAYMENT.concat("/" + uuid))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("errors", hasSize(1)))
+			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
+			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 	}
 	
 }

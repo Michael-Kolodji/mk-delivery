@@ -59,7 +59,7 @@ class PaymentServiceTest {
 		
 		assertThat(paymentSaved).isNotNull();
 		assertThat(paymentSaved.getId()).isNotNull();
-		assertThat(paymentSaved.getStatus()).isEqualTo(PaymentStatus.RECEBIDO);
+		assertThat(paymentSaved.getStatus()).isEqualTo(PaymentStatus.RECEIVED);
 	}
 	
 	@Test
@@ -77,13 +77,13 @@ class PaymentServiceTest {
 
 	@Test
 	@DisplayName("Should found a payment by uuid")
-	void findPaymentById() throws Exception {
+	void findPaymentById() {
 		
 		PaymentSlip paymentSlip = UtilPayment.paymentSlip();
 		
 		when(repository.findByUuid(anyString())).thenReturn(Optional.of(paymentSlip));
 
-		Payment paymentFounded = service.findById(paymentSlip.getUuid());
+		Payment paymentFounded = service.findByUuid(paymentSlip.getUuid());
 		
 		assertThat(paymentFounded).isNotNull();	
 		
@@ -91,14 +91,14 @@ class PaymentServiceTest {
 
 	@Test
 	@DisplayName("Should throw exception when not found a payment by uuid")
-	void notFoundPaymentById() throws Exception {
+	void notFoundPaymentById() {
 		
 		String id = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
 		String message = "Payment not found. id: " + id;
 		
 		when(repository.findByUuid(anyString())).thenReturn(Optional.empty());
 		
-		Throwable throwable = catchThrowable(() -> service.findById(id));
+		Throwable throwable = catchThrowable(() -> service.findByUuid(id));
 		
 			assertThat(throwable)
 				.isInstanceOf(EntityNotFoundException.class)
@@ -126,6 +126,46 @@ class PaymentServiceTest {
 		assertThat(paymentsFounded.getContent()).isEqualTo(payments);
 		assertThat(paymentsFounded.getPageable().getPageNumber()).isZero();
 		assertThat(paymentsFounded.getPageable().getPageSize()).isEqualTo(10);
+	}
+	
+	@Test
+	@DisplayName("Should reverse a payment")
+	void chargebackPayment() {
+		
+		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		
+		PaymentSlip paymentReturn = UtilPayment.paymentSlip();
+		paymentReturn.setStatus(PaymentStatus.REVERSED);
+		
+		PaymentSlip paymentStatusApproved = paymentReturn;
+		paymentStatusApproved.setStatus(PaymentStatus.APPROVED);
+		
+		when(repository.save(Mockito.any())).thenReturn(paymentReturn);
+		when(repository.findByUuid(Mockito.anyString())).thenReturn(Optional.of(paymentStatusApproved));
+		
+		Payment payment = service.chargeback(uuid);
+		
+		assertThat(payment).isNotNull();
+		assertThat(payment.getStatus()).isEqualTo(PaymentStatus.REVERSED);
+	}
+	
+	@Test
+	@DisplayName("Should throw a invalid reverse a payment")
+	void invalidChargebackPayment() {
+		
+		PaymentSlip paymentReturn = UtilPayment.paymentSlip();
+		
+		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		String message = "The payment can't be reversed";
+		
+		when(repository.save(Mockito.any())).thenReturn(paymentReturn);
+		when(repository.findByUuid(Mockito.anyString())).thenReturn(Optional.of(paymentReturn));
+		
+		Throwable throwable = catchThrowable(() -> service.chargeback(uuid));
+		
+		assertThat(throwable)
+			.isInstanceOf(BusinessException.class)
+			.hasMessage(message);
 	}
 	
 }

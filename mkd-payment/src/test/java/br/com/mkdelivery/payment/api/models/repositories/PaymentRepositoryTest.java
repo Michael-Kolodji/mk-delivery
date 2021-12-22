@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import br.com.mkdelivery.payment.api.domain.enums.PaymentStatus;
 import br.com.mkdelivery.payment.api.domain.models.Payment;
 import br.com.mkdelivery.payment.api.domain.models.PaymentSlip;
 import br.com.mkdelivery.payment.util.UtilPayment;
@@ -86,6 +87,20 @@ class PaymentRepositoryTest {
 		assertThat(result.getTotalElements()).isEqualTo(1);
 		assertThat(result.getPageable().getPageNumber()).isZero();
 		assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+		
+	}
+	
+	@Test
+	@DisplayName("Should reverse a payment")
+	void chargebackPayment() {
+		
+		PaymentSlip paymentToSave = UtilPayment.paymentSlip();
+		paymentToSave.setStatus(PaymentStatus.REVERSED);
+		
+		var payment = manager.persist(paymentToSave);
+		
+		assertThat(payment).isNotNull();
+		assertThat(payment.getStatus()).isEqualTo(PaymentStatus.REVERSED);
 		
 	}
 	

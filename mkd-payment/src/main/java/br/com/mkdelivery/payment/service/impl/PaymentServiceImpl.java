@@ -33,12 +33,12 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 		
 		payment.generateUuid();
-		payment.setStatus(PaymentStatus.RECEBIDO);
+		payment.setStatus(PaymentStatus.RECEIVED);
 		return repository.save(payment);
 	}
 
 	@Override
-	public Payment findById(String uuid) {
+	public Payment findByUuid(String uuid) {
 		return repository.findByUuid(uuid)
 				.orElseThrow(() -> 
 					new EntityNotFoundException("Payment not found. id: " + uuid));
@@ -53,6 +53,19 @@ public class PaymentServiceImpl implements PaymentService {
 								.withIgnoreNullValues()
 								.withStringMatcher(StringMatcher.CONTAINING));
 		return repository.findAll(example, pageable);
+	}
+
+	@Override
+	public Payment chargeback(String uuid) {
+		Payment payment = findByUuid(uuid);
+		
+		if(!payment.getStatus().equals(PaymentStatus.APPROVED)) {
+			throw new BusinessException("The payment can't be reversed");
+		}
+		
+		payment.setStatus(PaymentStatus.REVERSED);
+		
+		return repository.save(payment);
 	}
 
 }
