@@ -104,4 +104,17 @@ class PaymentRepositoryTest {
 		
 	}
 	
+	@Test
+	@DisplayName("Should cancel a payment")
+	void cancelPayment() {
+		
+		PaymentSlip paymentToSave = UtilPayment.paymentSlip();
+		paymentToSave.setStatus(PaymentStatus.CANCELED);
+		
+		var payment = manager.persist(paymentToSave);
+		
+		assertThat(payment).isNotNull();
+		assertThat(payment.getStatus()).isEqualTo(PaymentStatus.CANCELED);
+	}
+	
 }

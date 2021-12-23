@@ -15,4 +15,6 @@ public interface PaymentService {
 
 	Payment chargeback(String uuid);
 
+	Payment cancel(String uuid);
+
 }

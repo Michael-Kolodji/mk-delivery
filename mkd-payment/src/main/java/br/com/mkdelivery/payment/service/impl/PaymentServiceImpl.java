@@ -68,4 +68,17 @@ public class PaymentServiceImpl implements PaymentService {
 		return repository.save(payment);
 	}
 
+	@Override
+	public Payment cancel(String uuid) {
+		Payment payment = findByUuid(uuid);
+
+		if (!payment.getStatus().equals(PaymentStatus.RECEIVED)) {
+			throw new BusinessException("The payment can't be canceled");
+		}
+		
+		payment.setStatus(PaymentStatus.CANCELED);
+		
+		return repository.save(payment);
+	}
+
 }

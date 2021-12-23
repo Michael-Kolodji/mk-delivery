@@ -242,12 +242,13 @@ class PaymentResourceTest {
 	}
 	
 	@Test
-	@DisplayName("Should throw a invalid reverse a payment")
+	@DisplayName("Should throw exception when reverse a invalid payment")
 	void invalidChargebackPayment() throws Exception {
 		
 		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
 		
 		String message = "The payment can't be reversed";
+		
 		when(service.chargeback(Mockito.anyString())).thenThrow(new BusinessException(message));
 		
 		RequestBuilder request = MockMvcRequestBuilders
@@ -260,5 +261,47 @@ class PaymentResourceTest {
 			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
 			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
 	}
+
+	@Test
+	@DisplayName("Should cancel a payment")
+	void cancelPayment() throws Exception {
+		
+		PaymentSlip paymentSlip = UtilPayment.paymentSlip();
+		paymentSlip.setId(1l);
+		paymentSlip.setStatus(PaymentStatus.CANCELED);
+		
+		String uuid = paymentSlip.getUuid();
+		
+		when(service.cancel(Mockito.anyString())).thenReturn(paymentSlip);
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.delete(API_PAYMENT.concat("/" + uuid))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("id").value(paymentSlip.getUuid()))
+			.andExpect(jsonPath("status").value(PaymentStatus.CANCELED.toString()));
+	}
 	
+	@Test
+	@DisplayName("Should throw exception when cancel a invalid payment")
+	void invalidCancelPayment() throws Exception {
+		
+		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		
+		String message = "The payment can't be canceled";
+		
+		when(service.cancel(Mockito.anyString())).thenThrow(new BusinessException(message));
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.delete(API_PAYMENT.concat("/" + uuid))
+				.accept(APPLICATION_JSON);
+		
+		mvc.perform(request)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("errors", hasSize(1)))
+			.andExpect(jsonPath("message").value(HttpStatus.BAD_REQUEST.name()))
+			.andExpect(jsonPath("code").value(HttpStatus.BAD_REQUEST.value()));
+	}
 }

@@ -153,15 +153,55 @@ class PaymentServiceTest {
 	@DisplayName("Should throw a invalid reverse a payment")
 	void invalidChargebackPayment() {
 		
-		PaymentSlip paymentReturn = UtilPayment.paymentSlip();
+		Payment paymentReturn = UtilPayment.paymentSlip();
 		
 		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
 		String message = "The payment can't be reversed";
 		
-		when(repository.save(Mockito.any())).thenReturn(paymentReturn);
 		when(repository.findByUuid(Mockito.anyString())).thenReturn(Optional.of(paymentReturn));
 		
 		Throwable throwable = catchThrowable(() -> service.chargeback(uuid));
+		
+		assertThat(throwable)
+			.isInstanceOf(BusinessException.class)
+			.hasMessage(message);
+	}
+	
+	@Test
+	@DisplayName("Should cancel a payment")
+	void cancelPayment() {
+		
+		Payment payment = UtilPayment.paymentSlip();
+		payment.setStatus(PaymentStatus.RECEIVED);
+		
+		Payment savedPayment = UtilPayment.paymentSlip();
+		savedPayment.setStatus(PaymentStatus.CANCELED);
+		
+		String uuid = payment.getUuid();
+		
+		when(repository.findByUuid(anyString())).thenReturn(Optional.of(payment));
+		when(repository.save(Mockito.any())).thenReturn(savedPayment);
+		
+		Payment paymentCanceled = service.cancel(uuid);
+		
+		assertThat(paymentCanceled).isNotNull();
+		assertThat(paymentCanceled.getStatus()).isEqualTo(PaymentStatus.CANCELED);
+		
+	}
+	
+	@Test
+	@DisplayName("Should throw exception when cancel a invalid payment")
+	void invalidCancelPayment() {
+		
+		String uuid = "a0d7a0bf-ac09-4af6-b56f-13c1277a6b52";
+		String message = "The payment can't be canceled";
+		
+		Payment paymentReturn = UtilPayment.paymentSlip();
+		paymentReturn.setStatus(PaymentStatus.APPROVED);
+		
+		when(repository.findByUuid(Mockito.anyString())).thenReturn(Optional.of(paymentReturn));
+		
+		Throwable throwable = catchThrowable(() -> service.cancel(uuid));
 		
 		assertThat(throwable)
 			.isInstanceOf(BusinessException.class)
