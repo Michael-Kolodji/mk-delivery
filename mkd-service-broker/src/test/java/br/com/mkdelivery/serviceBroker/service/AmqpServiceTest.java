@@ -42,7 +42,7 @@ class AmqpServiceTest {
 		
 		service.sendToConsumer(message);
 		
-//		verify(rabbitTemplate).convertAndSend("", "", message);
+		verify(rabbitTemplate).convertAndSend(null, null, message);
 	}
 	
 }
