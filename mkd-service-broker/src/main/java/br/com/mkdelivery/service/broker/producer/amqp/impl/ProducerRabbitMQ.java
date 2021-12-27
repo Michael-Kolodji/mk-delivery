@@ -1,12 +1,12 @@
-package br.com.mkdelivery.serviceBroker.amqp.impl;
+package br.com.mkdelivery.service.broker.producer.amqp.impl;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import br.com.mkdelivery.serviceBroker.amqp.AmqpProducer;
-import br.com.mkdelivery.serviceBroker.api.dto.MessageQueue;
+import br.com.mkdelivery.service.broker.producer.amqp.AmqpProducer;
+import br.com.mkdelivery.service.broker.producer.api.dto.MessageQueue;
 import lombok.RequiredArgsConstructor;
 
 @Component

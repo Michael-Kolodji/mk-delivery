@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>br.com.mkdelivery.serviceBroker</groupId>
-	<artifactId>mkd-service-broker</artifactId>
+	<groupId>br.com.mkdelivery.service.broker.producer</groupId>
+	<artifactId>mkd-service-broker-producer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mkd-service-broker</name>
-	<description>Service Broker System</description>
+	<name>mkd-service-broker-producer</name>
+	<description>Service Broker Producer System</description>
 	
 	<parent>
 		<groupId>org.springframework.boot</groupId>

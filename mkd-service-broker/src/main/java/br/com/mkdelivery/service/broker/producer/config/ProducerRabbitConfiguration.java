@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker.config;
+package br.com.mkdelivery.service.broker.producer.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

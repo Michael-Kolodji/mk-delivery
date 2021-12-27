@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker.api.resources;
+package br.com.mkdelivery.service.broker.producer.api.resources;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -21,8 +21,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.mkdelivery.serviceBroker.api.dto.MessageQueue;
-import br.com.mkdelivery.serviceBroker.service.AmqpService;
+import br.com.mkdelivery.service.broker.producer.api.dto.MessageQueue;
+import br.com.mkdelivery.service.broker.producer.api.resources.AmqpResource;
+import br.com.mkdelivery.service.broker.producer.service.AmqpService;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")

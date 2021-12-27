@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker.config;
+package br.com.mkdelivery.service.broker.producer.config;
 
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

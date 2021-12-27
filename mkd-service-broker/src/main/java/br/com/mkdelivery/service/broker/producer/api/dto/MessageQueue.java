@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker.api.dto;
+package br.com.mkdelivery.service.broker.producer.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

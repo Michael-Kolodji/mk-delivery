@@ -1,10 +1,10 @@
-package br.com.mkdelivery.serviceBroker.service.impl;
+package br.com.mkdelivery.service.broker.producer.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import br.com.mkdelivery.serviceBroker.amqp.AmqpProducer;
-import br.com.mkdelivery.serviceBroker.api.dto.MessageQueue;
-import br.com.mkdelivery.serviceBroker.service.AmqpService;
+import br.com.mkdelivery.service.broker.producer.amqp.AmqpProducer;
+import br.com.mkdelivery.service.broker.producer.api.dto.MessageQueue;
+import br.com.mkdelivery.service.broker.producer.service.AmqpService;
 import lombok.RequiredArgsConstructor;
 
 @Service

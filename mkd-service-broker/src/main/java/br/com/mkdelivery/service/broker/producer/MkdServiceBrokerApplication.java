@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker;
+package br.com.mkdelivery.service.broker.producer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

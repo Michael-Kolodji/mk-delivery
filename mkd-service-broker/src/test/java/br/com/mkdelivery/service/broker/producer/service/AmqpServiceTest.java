@@ -1,4 +1,4 @@
-package br.com.mkdelivery.serviceBroker.service;
+package br.com.mkdelivery.service.broker.producer.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -14,9 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import br.com.mkdelivery.serviceBroker.amqp.impl.ProducerRabbitMQ;
-import br.com.mkdelivery.serviceBroker.api.dto.MessageQueue;
-import br.com.mkdelivery.serviceBroker.service.impl.RabbitMQServiceImpl;
+import br.com.mkdelivery.service.broker.producer.amqp.impl.ProducerRabbitMQ;
+import br.com.mkdelivery.service.broker.producer.api.dto.MessageQueue;
+import br.com.mkdelivery.service.broker.producer.service.AmqpService;
+import br.com.mkdelivery.service.broker.producer.service.impl.RabbitMQServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
