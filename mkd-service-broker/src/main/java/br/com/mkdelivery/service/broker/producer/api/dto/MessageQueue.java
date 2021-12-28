@@ -14,5 +14,6 @@ import lombok.Setter;
 public class MessageQueue {
 
 	private String text;
+	private String email;
 	
 }

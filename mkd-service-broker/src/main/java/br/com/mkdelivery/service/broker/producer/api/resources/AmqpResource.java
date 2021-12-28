@@ -12,7 +12,7 @@ import br.com.mkdelivery.service.broker.producer.service.AmqpService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/amqp")
+@RequestMapping("/amqp/producer")
 @RequiredArgsConstructor
 public class AmqpResource {
 

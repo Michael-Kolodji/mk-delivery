@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ProducerRabbitConfiguration {
 
-	@Value("${spring.rabbitmq.request.exchenge.producer}")
+	@Value("${spring.rabbitmq.request.exchange.producer}")
     private String exchange;
 
     @Value("${spring.rabbitmq.request.routing-key.producer}")

@@ -7,13 +7,17 @@ spring:
       port: 5672
       username: guest
       password: guest
-      exchenge:
+      exchange:
         producer: ex.producer.service-broker
+        consumer: ex.consumer.service-broker
       routing-key:
         producer: rk.producer.service-broker
+        consumer: rk.consumer.service-broker
       dead-letter:
         producer: dl.producer.service-broker
+        consumer: dl.consumer.service-broker
       parking-lot:
         producer: pl.producer.service-broker
+        consumer: pl.consumer.service-broker
     listener:
       time-retry: 00 39 22 * * *

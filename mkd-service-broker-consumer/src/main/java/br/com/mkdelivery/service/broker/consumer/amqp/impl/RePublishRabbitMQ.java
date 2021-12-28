@@ -19,7 +19,7 @@ public class RePublishRabbitMQ implements AmqpRePublish {
 
 	private final RabbitTemplate rabbitTemplate;
 
-    @Value("${spring.rabbitmq.request.exchenge.producer}")
+    @Value("${spring.rabbitmq.request.exchange.producer}")
     private String exchange;
 
     @Value("${spring.rabbitmq.request.routing-key.producer}")

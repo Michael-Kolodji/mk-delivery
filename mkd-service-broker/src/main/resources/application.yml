@@ -7,7 +7,7 @@ spring:
       port: 5672
       username: guest
       password: guest
-      exchenge:
+      exchange:
         producer: ex.producer.service-broker
       routing-key:
         producer: rk.producer.service-broker
