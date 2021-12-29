@@ -18,7 +18,13 @@ public class AmqpResource {
 
 	private final AmqpService service;
 	
-	@PostMapping("/send")
+	@PostMapping("/sendToProducer")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public void sendToProducer(@RequestBody MessageQueue message) {
+		service.sendToProducer(message);
+	}
+	
+	@PostMapping("/sendToConsumer")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void sendToConsumer(@RequestBody MessageQueue message) {
 		service.sendToConsumer(message);

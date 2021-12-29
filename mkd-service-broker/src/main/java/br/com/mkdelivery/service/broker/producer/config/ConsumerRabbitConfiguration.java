@@ -10,52 +10,52 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ProducerRabbitConfiguration {
+public class ConsumerRabbitConfiguration {
 
-	@Value("${spring.rabbitmq.request.routing-key.producer}")
+	@Value("${spring.rabbitmq.request.routing-key.consumer}")
 	private String queue;
 
-	@Value("${spring.rabbitmq.request.exchange.producer}")
+	@Value("${spring.rabbitmq.request.exchange.consumer}")
 	private String exchange;
 
-	@Value("${spring.rabbitmq.request.dead-letter.producer}")
+	@Value("${spring.rabbitmq.request.dead-letter.consumer}")
 	private String deadLetter;
 
-	@Value("${spring.rabbitmq.request.parking-lot.producer}")
+	@Value("${spring.rabbitmq.request.parking-lot.consumer}")
 	private String parkingLot;
 
 	@Bean
-	DirectExchange exchangeProducer() {
+	DirectExchange exchangeConsumer() {
 		return new DirectExchange(exchange);
 	}
 
 	@Bean
-	Queue deadLetterProducer() {
+	Queue deadLetterConsumer() {
 		return QueueBuilder.durable(deadLetter).deadLetterExchange(exchange).deadLetterRoutingKey(queue).build();
 	}
 
 	@Bean
-	Queue queueProducer() {
+	Queue queueConsumer() {
 		return QueueBuilder.durable(queue).deadLetterExchange(exchange).deadLetterRoutingKey(deadLetter).build();
 	}
 
 	@Bean
-	Queue parkingLotProducer() {
+	Queue parkingLotConsumer() {
 		return new Queue(parkingLot);
 	}
 
 	@Bean
-	public Binding bindingQueueProducer() {
-		return BindingBuilder.bind(queueProducer()).to(exchangeProducer()).with(queue);
+	public Binding bindingQueueConsumer() {
+		return BindingBuilder.bind(queueConsumer()).to(exchangeConsumer()).with(queue);
 	}
 
 	@Bean
-	public Binding bindingDeadLetterProducer() {
-		return BindingBuilder.bind(deadLetterProducer()).to(exchangeProducer()).with(deadLetter);
+	public Binding bindingDeadLetterConsumer() {
+		return BindingBuilder.bind(deadLetterConsumer()).to(exchangeConsumer()).with(deadLetter);
 	}
 
 	@Bean
-	public Binding bindingParkingLotProducer() {
-		return BindingBuilder.bind(parkingLotProducer()).to(exchangeProducer()).with(parkingLot);
+	public Binding bindingParkingLotConsumer() {
+		return BindingBuilder.bind(parkingLotConsumer()).to(exchangeConsumer()).with(parkingLot);
 	}
 }

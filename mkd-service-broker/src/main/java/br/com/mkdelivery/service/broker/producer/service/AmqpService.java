@@ -6,4 +6,6 @@ public interface AmqpService {
 
 	void sendToConsumer(MessageQueue message);
 
+	void sendToProducer(MessageQueue message);
+
 }

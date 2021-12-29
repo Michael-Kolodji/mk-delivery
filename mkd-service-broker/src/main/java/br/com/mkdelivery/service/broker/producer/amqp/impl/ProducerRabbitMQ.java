@@ -16,18 +16,34 @@ public class ProducerRabbitMQ implements AmqpProducer<MessageQueue> {
 	private final RabbitTemplate rabbitTemplate;
 	
 	@Value("${spring.rabbitmq.request.routing-key.producer}")
-    private String queue;
+    private String queueProducer;
 
     @Value("${spring.rabbitmq.request.exchange.producer}")
-    private String exchange;
+    private String exchangeProducer;
+
+    @Value("${spring.rabbitmq.request.routing-key.consumer}")
+    private String queueConsumer;
+    
+    @Value("${spring.rabbitmq.request.exchange.consumer}")
+    private String exchangeConsumer;
 
 	@Override
 	public void producer(MessageQueue message) {
 		try {
-            rabbitTemplate.convertAndSend(exchange, queue, message);
+            rabbitTemplate.convertAndSend(exchangeProducer, queueProducer, message);
         } catch (Exception ex) {
             throw new AmqpRejectAndDontRequeueException(ex);
         }
+	}
+
+	@Override
+	public void consumer(MessageQueue message) {
+		try {
+            rabbitTemplate.convertAndSend(exchangeConsumer, queueConsumer, message);
+        } catch (Exception ex) {
+            throw new AmqpRejectAndDontRequeueException(ex);
+        }
+		
 	}
 
 }

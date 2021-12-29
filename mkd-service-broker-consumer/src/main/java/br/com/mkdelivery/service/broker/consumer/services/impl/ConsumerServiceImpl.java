@@ -1,6 +1,5 @@
 package br.com.mkdelivery.service.broker.consumer.services.impl;
 
-import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.stereotype.Service;
 
 import br.com.mkdelivery.service.broker.consumer.api.dto.MessageQueue;
