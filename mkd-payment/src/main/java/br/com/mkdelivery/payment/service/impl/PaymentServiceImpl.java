@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentServiceImpl implements PaymentService {
 
 	private final PaymentRepository repository;
+	private final ProcessPayment processPayment;
 	
 	@Override
 	public Payment save(Payment payment) {
@@ -34,7 +35,12 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		payment.generateUuid();
 		payment.setStatus(PaymentStatus.RECEIVED);
-		return repository.save(payment);
+		
+		Payment paymentSaved = repository.save(payment);
+		
+		processPayment.sendPayment(payment);
+		
+		return paymentSaved;
 	}
 
 	@Override

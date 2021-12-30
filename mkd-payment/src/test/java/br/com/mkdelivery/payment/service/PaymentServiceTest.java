@@ -30,6 +30,7 @@ import br.com.mkdelivery.payment.api.domain.models.PaymentSlip;
 import br.com.mkdelivery.payment.api.models.repositories.PaymentRepository;
 import br.com.mkdelivery.payment.exception.BusinessException;
 import br.com.mkdelivery.payment.service.impl.PaymentServiceImpl;
+import br.com.mkdelivery.payment.service.impl.ProcessPayment;
 import br.com.mkdelivery.payment.util.UtilPayment;
 
 @ExtendWith(SpringExtension.class)
@@ -41,9 +42,12 @@ class PaymentServiceTest {
 	@MockBean
 	PaymentRepository repository;
 	
+	@MockBean
+	ProcessPayment processPayment;
+	
 	@BeforeEach
 	void setup() {
-		service = new PaymentServiceImpl(repository); 
+		service = new PaymentServiceImpl(repository, processPayment); 
 	}
 	
 	@Test

@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<model-mapper.version>2.4.4</model-mapper.version>
+		<spring-cloud.version>2020.0.5</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -63,6 +64,10 @@
 			<version>${model-mapper.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -82,4 +87,15 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

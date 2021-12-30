@@ -38,6 +38,9 @@ public class Payment {
 	
 	@Getter
 	protected String uuid;
+
+	@Transient
+	protected String classType;
 	
 	@Transient
 	@Column(name = "payment_type")

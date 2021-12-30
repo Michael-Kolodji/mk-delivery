@@ -23,6 +23,8 @@ import lombok.experimental.SuperBuilder;
 })
 public abstract class PaymentDTO {
 
+	protected Long id;
+	
 	protected String uuid;
 
 	protected String email;

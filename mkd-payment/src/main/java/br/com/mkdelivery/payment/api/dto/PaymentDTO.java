@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "classType", visible = true)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PaymentSlipDTO.class, name = "SLIP"),
     @JsonSubTypes.Type(value = PaymentCreditCardDTO.class, name = "CARD")
@@ -30,6 +30,10 @@ public abstract class PaymentDTO {
 
 	@JsonProperty("id")
 	protected String uuid;
+	
+	protected String classType;
+	
+	protected String email;
 	
 	protected PaymentType type;
 	
