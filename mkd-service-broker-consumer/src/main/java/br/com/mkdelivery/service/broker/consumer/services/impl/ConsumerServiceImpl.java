@@ -16,5 +16,10 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         System.out.println(message.getText());
     }
+
+	@Override
+	public void actionSendMail(MessageQueue message) {
+		System.out.println(message.getText());		
+	}
 	
 }

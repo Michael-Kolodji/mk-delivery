@@ -1,4 +1,4 @@
-package br.com.mkdelivery.process.payment.services.impl;
+package br.com.mkdelivery.process.payment.services;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;

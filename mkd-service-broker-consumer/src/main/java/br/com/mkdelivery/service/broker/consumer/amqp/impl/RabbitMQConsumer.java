@@ -25,4 +25,14 @@ public class RabbitMQConsumer implements AmqpConsumer<MessageQueue> {
         }		
 	}
 
+	@Override
+	@RabbitListener(queues = "${spring.rabbitmq.request.routing-key.consumer}")
+	public void consumesProcessedPaymentQueue(MessageQueue message) {
+		try {
+			consumerService.actionSendMail(message);
+		} catch (Exception ex) {
+			throw new AmqpRejectAndDontRequeueException(ex);
+		}		
+	}
+
 }

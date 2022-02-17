@@ -6,4 +6,6 @@ public interface ConsumerService {
 
 	void action(MessageQueue message);
 
+	void actionSendMail(MessageQueue message);
+
 }
